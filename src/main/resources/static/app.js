@@ -1,6 +1,13 @@
+
+function getUserSession(){
+	return JSON.Parse(sessionStorage.getItem("userSession"));
+}
+
 function loadUser() {
+	
+	
     $.ajax({
-        url: 'http://localhost:8080/api/v1/user/'
+        url: 'http://localhost:8080/api/v1/user/all'+getUserSession().id
         type:'GET',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -8,7 +15,14 @@ function loadUser() {
     	
         	if(response.success){
         		
-			    	<tr> <th scope="row">1</th> <td>Mark</td> <td>Mark </td> </tr>
+        		var entity = response.entity;
+        		
+        			for (int i=0; i< entity.lenght; i++;){
+        				
+        			}
+        			
+        			}
+			    	'<tr> <th scope="row">1</th> <td>'+ entity.username +'</td> <td>Mark </td> </tr>'
 			    	
 				        $("#attempt-form").find( "input[name='result-attempt']" ).val("");
 				        $("#attempt-form").find( "input[name='user-alias']" ).val("");
@@ -40,7 +54,7 @@ $(document).ready(function() {
              success:function(response){
                  var msg = "";
                  if(response.success){
-                	 sessionStorage.setItem("userSession", response.entity);
+                	 sessionStorage.setItem("userSession", JSON.stringify(response.entity));
                      window.location = "creditcards.html";
                  }else{
                      msg = "Invalid username and password!";
