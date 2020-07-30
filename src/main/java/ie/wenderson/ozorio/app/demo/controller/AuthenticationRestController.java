@@ -24,11 +24,8 @@ public class AuthenticationRestController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<BaseEntity<User>> login(@RequestBody LoginVO login){
     	BaseEntity<User> base = userService.login(login);
-        if(base.isSuccess()) {
-        	return new ResponseEntity<BaseEntity<User>>(base, new HttpHeaders(), HttpStatus.OK);
-        }else {
-        	return new ResponseEntity<BaseEntity<User>>(base, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<BaseEntity<User>>(base, new HttpHeaders(), HttpStatus.OK);
+        
     }
 
 }
