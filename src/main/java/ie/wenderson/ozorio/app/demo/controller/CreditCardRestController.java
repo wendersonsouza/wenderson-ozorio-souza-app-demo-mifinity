@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ie.wenderson.ozorio.app.demo.common.BaseEntity;
+import ie.wenderson.ozorio.app.demo.common.MonthsEnum;
 import ie.wenderson.ozorio.app.demo.entity.CreditCard;
 import ie.wenderson.ozorio.app.demo.service.impl.CreditCardServiceImpl;
 
@@ -27,24 +28,36 @@ public class CreditCardRestController {
     public ResponseEntity<BaseEntity<List<CreditCard>>> listByUserAndNumber(@PathVariable("loggedUserId") Long loggedUserId,
     																        @PathVariable("number") String number){
     	BaseEntity<List<CreditCard>> base = creditCardService.listAllByUserAndNumber(loggedUserId, number);
-    	HttpStatus status =  base.isSuccess() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
-        return new ResponseEntity<BaseEntity<List<CreditCard>>>(base, new HttpHeaders(), status);
+        return new ResponseEntity<BaseEntity<List<CreditCard>>>(base, new HttpHeaders(), HttpStatus.OK);
         
     }
 	
     @RequestMapping(value = "/{loggedUserId}", method = RequestMethod.POST)
     public ResponseEntity<BaseEntity<CreditCard>> create(@PathVariable("loggedUserId") Long loggedUserId, @RequestBody CreditCard creditCard){
     	BaseEntity<CreditCard> base = creditCardService.create(loggedUserId, creditCard);
-    	HttpStatus status =  base.isSuccess() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
-    	return new  ResponseEntity<BaseEntity<CreditCard>>(base, new HttpHeaders(), status);
+    	return new  ResponseEntity<BaseEntity<CreditCard>>(base, new HttpHeaders(), HttpStatus.OK);
     }
     
     @RequestMapping(value = "/{loggedUserId}", method = RequestMethod.PUT)
     public ResponseEntity<BaseEntity<CreditCard>> update(@PathVariable("loggedUserId") Long loggedUserId, @RequestBody CreditCard creditCard){
     	BaseEntity<CreditCard> base = creditCardService.update(loggedUserId, creditCard);
-    	HttpStatus status =  base.isSuccess() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
-    	return new  ResponseEntity<BaseEntity<CreditCard>>(base, new HttpHeaders(), status);
+    	return new  ResponseEntity<BaseEntity<CreditCard>>(base, new HttpHeaders(), HttpStatus.OK);
     	
+    }
+    
+    @RequestMapping(value = "/{loggedUserId}/{id}", method = RequestMethod.GET)	    
+    public ResponseEntity<BaseEntity<CreditCard>> retrieveByUserAndNumber(@PathVariable("loggedUserId") Long loggedUserId,
+    																        @PathVariable("id") Long id){
+    	BaseEntity<CreditCard> base = creditCardService.retrieveByUserAndNumber(loggedUserId, id);
+        return new ResponseEntity<BaseEntity<CreditCard>> (base, new HttpHeaders(), HttpStatus.OK);
+        
+    }
+    
+    @RequestMapping(value = "/months", method = RequestMethod.GET)	    
+    public ResponseEntity<BaseEntity<List<MonthsEnum>>> listAllMonths(){
+    	BaseEntity<List<MonthsEnum>> base = creditCardService.listAllMonths();
+        return new ResponseEntity<BaseEntity<List<MonthsEnum>>> (base, new HttpHeaders(), HttpStatus.OK);
+        
     }
 	
 }

@@ -9,9 +9,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	public boolean existsByIdAndRole(Long id, Role role);
 	
-	public boolean existsByUsername(String username);
+	public boolean existsByUsernameIgnoreCase(String username);
 	
 	public User findByUsernameAndPassword(String username, String Password);
+	
+	public User findByUsernameIgnoreCase(String username);
 	
 
 }

@@ -3,6 +3,7 @@ package ie.wenderson.ozorio.app.demo.service.impl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import ie.wenderson.ozorio.app.demo.common.BaseEntity;
+import ie.wenderson.ozorio.app.demo.common.MonthsEnum;
 import ie.wenderson.ozorio.app.demo.entity.CreditCard;
 import ie.wenderson.ozorio.app.demo.repository.CreditCardRepository;
 
@@ -21,6 +23,15 @@ public class CreditCardServiceImpl extends GenericService {
 	
 	@Autowired
 	private CreditCardRepository credCardRepository;
+	
+	
+	public BaseEntity<List<MonthsEnum>> listAllMonths(){
+    	BaseEntity<List<MonthsEnum>> baseEntity = new BaseEntity<List<MonthsEnum>>();
+    	baseEntity.setEntity(Arrays.asList(MonthsEnum.values()));
+		baseEntity.setMessage("Month list retrieved successfuly");
+		baseEntity.setSuccess(true);
+        return baseEntity;
+	}
 	
 	
 	public BaseEntity<List<CreditCard>> listAllByUserAndNumber(Long loggedUserId, String number){
@@ -35,6 +46,30 @@ public class CreditCardServiceImpl extends GenericService {
     		}
     		baseEntity.setEntity(list);
     		baseEntity.setMessage(!CollectionUtils.isEmpty(list) ? "Credit card list retrieved successfuly" : "Credit Card not found.");
+    		baseEntity.setSuccess(true);
+    	}catch(Exception ex) {
+    		if(StringUtils.isEmpty(baseEntity.getMessage())) {
+    			baseEntity.setSuccess(false);
+    			baseEntity.setMessage("Error on recovery CreditCard.");
+    		}
+    		
+    	}
+         return baseEntity;
+	}
+	
+	public BaseEntity<CreditCard> retrieveByUserAndNumber(Long loggedUserId, Long id){
+    	BaseEntity<CreditCard> baseEntity = new BaseEntity<CreditCard>();
+    	Optional<CreditCard> entity = null;
+    	try {
+    		
+    		if(isValidAdminUser(loggedUserId, baseEntity)) {
+    			entity = credCardRepository.findById(id);
+    		}else {
+    			entity = credCardRepository.findByIdAndUserId(id,loggedUserId);
+    		}
+    		CreditCard creditcard = entity.orElse(null);
+    		baseEntity.setEntity(creditcard);
+    		baseEntity.setMessage(entity.isPresent() ? "Credit card retrieved successfuly" : "Credit Card not found.");
     		baseEntity.setSuccess(true);
     	}catch(Exception ex) {
     		if(StringUtils.isEmpty(baseEntity.getMessage())) {
@@ -85,6 +120,8 @@ public class CreditCardServiceImpl extends GenericService {
 		try {
 			isValidAdminUser(loggedUserId, baseEntity);
 			validateInsertParameters(baseEntity, credicard);
+			credicard.setNumber(StringUtils.trimAllWhitespace(credicard.getNumber()));
+			validateNumber(baseEntity, credicard.getNumber());
 			validateMonthAndYear(baseEntity, credicard.getYear(), credicard.getMonth());
 			validateNumberExist(baseEntity, credicard.getNumber()); 
 			credicard.setExpiryDate(expiryDateFormartter(credicard.getYear(), credicard.getMonth()));
@@ -102,6 +139,14 @@ public class CreditCardServiceImpl extends GenericService {
          return baseEntity;
 	}
 	
+	private void validateNumber(BaseEntity<CreditCard> baseEntity, String number) throws Exception{
+		
+		if(number.length() != 16) {
+			baseEntity.setMessage("Credit card number must have 16 nemeric digits.");
+			baseEntity.setSuccess(false);
+			throw new Exception();
+		}
+	}
 	private void validateInsertParameters(BaseEntity<CreditCard> baseEntity, CreditCard credicard) throws Exception{
 		if(StringUtils.isEmpty(credicard.getMonth()) || StringUtils.isEmpty(credicard.getYear())
 				|| StringUtils.isEmpty(credicard.getHolderName()) || StringUtils.isEmpty(credicard.getNumber())) {

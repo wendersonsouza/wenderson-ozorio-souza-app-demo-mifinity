@@ -1,5 +1,6 @@
 package ie.wenderson.ozorio.app.demo.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,14 @@ import ie.wenderson.ozorio.app.demo.vo.LoginVO;
 
 @Service
 public class UserServiceImpl extends GenericService{
+	
+    public BaseEntity<List<Role>> gettAllRoles(){
+    	BaseEntity<List<Role>> baseEntity = new BaseEntity<List<Role>>();
+		        baseEntity.setEntity(Arrays.asList(Role.values())); 
+    			baseEntity.setSuccess(true);
+		        baseEntity.setMessage("Roles list retrieved successfuly");
+         return baseEntity;
+    }
 	
     public BaseEntity<List<User>> getAll(Long loggedUserId)
     {
@@ -73,6 +82,8 @@ public class UserServiceImpl extends GenericService{
     	try {
     			validateParameters(baseEntity, entity);
     			checkUsernameExist(baseEntity, entity.getUsername());
+    			entity.setRole(Role.getByName(entity.getRoleName()));
+    			entity.encryptPassword();
     			baseEntity.setEntity(userRepository.save(entity));
                 baseEntity.setMessage("User has been created successfuly");
                 baseEntity.setSuccess(true);
@@ -100,15 +111,26 @@ public class UserServiceImpl extends GenericService{
         		baseEntity.setSuccess(false);
         	}else {
         		
-        		User user =userRepository.findByUsernameAndPassword(login.getUsername(), login.getPassword());
+        		User user =userRepository.findByUsernameIgnoreCase(login.getUsername());
         		if(user == null) {
         			baseEntity.setMessage("Invalid username and/or password.");
             		baseEntity.setSuccess(false);
         		}else {
-        			user.setPassword(null);
-        			baseEntity.setEntity(user);
-                    baseEntity.setMessage("User has been logged successfuly.");
-                    baseEntity.setSuccess(true);
+        			
+        			user.decryptPassword();
+        			if(login.getPassword().equals(user.getPassword())) {
+            			user.setPassword(null);
+        				baseEntity.setEntity(user);
+                        baseEntity.setMessage("User has been logged successfuly.");
+                        baseEntity.setSuccess(true);
+                        
+        			}else {
+                        baseEntity.setMessage("Invalid username and/or password.");
+                        baseEntity.setSuccess(false);
+
+        			}
+        			
+        			
         		}
     		
 
@@ -128,7 +150,7 @@ public class UserServiceImpl extends GenericService{
     
     private void checkUsernameExist(BaseEntity<User> baseEntity,String username) throws Exception{
     	
-    	if (userRepository.existsByUsername(username)) {
+    	if (userRepository.existsByUsernameIgnoreCase(username)) {
     		baseEntity.setMessage("Username already exist.");
     		baseEntity.setSuccess(false);
     		throw new Exception();
@@ -138,7 +160,7 @@ public class UserServiceImpl extends GenericService{
     private void validateParameters(BaseEntity<User> baseEntity, User entity) throws Exception {
     	
     	if(StringUtils.isEmpty(entity.getUsername()) || StringUtils.isEmpty(entity.getPassword()) 
-    			|| entity.getRole() == null) {
+    			|| Role.getByName(entity.getRoleName()) == null) {
     		baseEntity.setMessage("Invalid Parameters");
     		baseEntity.setSuccess(false);
     		throw new Exception();
