@@ -23,4 +23,4 @@ Application login
 H2 Database (in memory) 
 	url: http://localhost:8080/h2
 	user: sa
-	* do not need to type password.
+* do not need to type password.
