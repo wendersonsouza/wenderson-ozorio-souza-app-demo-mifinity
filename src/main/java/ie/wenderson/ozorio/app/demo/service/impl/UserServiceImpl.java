@@ -77,11 +77,12 @@ public class UserServiceImpl extends GenericService{
         
     }
     
-    public BaseEntity<User> create(User entity)
+    public BaseEntity<User> create(Long loggedUserId, User entity)
     {
     	BaseEntity<User> baseEntity = new BaseEntity<User>();
     	
     	try {
+    		if(isValidAdminUser(loggedUserId,baseEntity)) {
     			validateParameters(baseEntity, entity);
     			checkUsernameExist(baseEntity, entity.getUsername());
     			entity.setRole(Role.getByName(entity.getRoleName()));
@@ -89,7 +90,10 @@ public class UserServiceImpl extends GenericService{
     			baseEntity.setEntity(userRepository.save(entity));
                 baseEntity.setMessage("User has been created successfuly");
                 baseEntity.setSuccess(true);
-    		
+    		}else {
+    			baseEntity.setMessage("User not Authorized.");
+                baseEntity.setSuccess(false);
+    		}
     		
     	}catch(Exception ex ) {
     		if(StringUtils.isEmpty(baseEntity.getMessage())) {
@@ -101,6 +105,16 @@ public class UserServiceImpl extends GenericService{
         
          return baseEntity;
         
+    }
+    
+    public void setupUserAdmin(User entity){
+		try {
+			entity.encryptPassword();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+    	userRepository.save(entity);
     }
     
     public BaseEntity<User> login(LoginVO login)

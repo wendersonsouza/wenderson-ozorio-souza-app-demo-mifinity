@@ -34,7 +34,7 @@ public class Application implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		UserServiceImpl userService = appContext.getBean(UserServiceImpl.class);
-		userService.create(new User("user01", "user01", Role.AD.getName()));
+		userService.setupUserAdmin(new User(null,"user01", "user01", Role.AD));
 		
 	}
 

@@ -31,9 +31,9 @@ public class UserRestController {
         
     }
     
-    @RequestMapping( method = RequestMethod.POST)
-    public ResponseEntity<BaseEntity<User>> create(@RequestBody User user){
-    	BaseEntity<User> base = userService.create(user);
+    @RequestMapping(value = "/{loggedUserId}", method = RequestMethod.POST)
+    public ResponseEntity<BaseEntity<User>> create(@PathVariable("loggedUserId") Long loggedUserId, @RequestBody User user){
+    	BaseEntity<User> base = userService.create(loggedUserId, user);
         	return new ResponseEntity<BaseEntity<User>>(base, new HttpHeaders(), HttpStatus.OK);
         
     }

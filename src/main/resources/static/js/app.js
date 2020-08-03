@@ -3,12 +3,18 @@ function getUserSession(){
 	return JSON.parse(sessionStorage.getItem("userSession"));
 }
 
+
+
 function checkUserSession(){
 	var usersession = JSON.parse(sessionStorage.getItem("userSession"));
 	if(usersession == null || usersession == undefined){
 		window.location = "login.html";
 	}else{
 		$("#logged-user").html(getUserSession().username);
+		if(usersession.roleName == "Operator"){
+			$('#user-button').hide();
+			$('#new-user-button').hide();
+		}
 	}
 }
 
@@ -83,14 +89,12 @@ function loadRoleValues(){
         }
     });
 
-//	for (i = 0; i < roles.length; i++) {
-//		$('#inputrole').append(new Option(roles[i].label, roles[i].value));
-//	}
 }
 
 function loadUsers() {
 	
 	var loggedUserId = getUserSession().id;
+	
     $.ajax({
         url: 'http://localhost:8080/api/v1/user/all/'+loggedUserId,
         type:'GET',
@@ -105,8 +109,11 @@ function loadUsers() {
     				$("#userTable").append('<tr> <th scope="row">'+ index +'</th> <td>'+ entity.username +'</td> <td>'+ entity.roleName +'</td> </tr>')
     			}    
         	}else{
+        		
             	showErrorMessage(response.message);
         	}
+        	
+        	
         	
         },
         error: function(xhr, status, error){
@@ -120,7 +127,7 @@ function saveUser(data) {
 	
 	var loggedUserId = getUserSession().id;
     $.ajax({
-        url: 'http://localhost:8080/api/v1/user',
+        url: 'http://localhost:8080/api/v1/user/'+loggedUserId,
         type:'POST',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -250,6 +257,7 @@ function fowardSaveCreditcard(parameters){
 
 function fowardCreditcards(){
 	window.location = "creditcards.html";
+	
 }
 
 function savecrediticard(data, type){
