@@ -183,13 +183,13 @@ public class UserServiceImpl extends GenericService{
     		baseEntity.setMessage("Username must contain letters and/or numbers without spaces.");
     		
     	}else  if(entity.getUsername().length()< 6 || entity.getUsername().length()> 10) {
-        	baseEntity.setMessage("Username must contain minimum 6 and maximum 10 letters.");
+        	baseEntity.setMessage("Username must contain minimum 6 and maximum 10 characters.");
 
     	}else  if(!checkIsLettersandNumbers(entity.getPassword())) {
     		baseEntity.setMessage("Password must contain letters and/or numbers without spaces.");
     		
     	}else if(entity.getPassword().length()< 6 || entity.getPassword().length()> 10) {
-    		baseEntity.setMessage("Password must contain minimum 6 and maximum 10 letters.");
+    		baseEntity.setMessage("Password must contain minimum 6 and maximum 10 characters.");
     		    		
     	}
     	
