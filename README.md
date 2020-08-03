@@ -18,9 +18,10 @@ access http://localhost:8080/login.html
 credentials:
 
 Application login
-	username: user01 password: user01
+- username: user01 
+- password: user01
 	
 H2 Database (in memory) 
-	url: http://localhost:8080/h2
-	user: sa
+- url: http://localhost:8080/h2
+- user: sa
 * do not need to type password.
