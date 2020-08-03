@@ -16,10 +16,11 @@ after that assuming the 8080 has been set up.
 access http://localhost:8080/login.html
 
 credentials:
+
 Application login
 	username: user01 password: user01
 	
-H2 Database (in memory) login
+H2 Database (in memory) 
 	url: http://localhost:8080/h2
 	user: sa
-	password: 
+	
