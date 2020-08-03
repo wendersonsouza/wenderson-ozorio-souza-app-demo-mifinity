@@ -7,6 +7,8 @@ function checkUserSession(){
 	var usersession = JSON.parse(sessionStorage.getItem("userSession"));
 	if(usersession == null || usersession == undefined){
 		window.location = "login.html";
+	}else{
+		$("#logged-user").html(getUserSession().username);
 	}
 }
 
@@ -286,7 +288,7 @@ function fowardUsers(){
 $(document).ready(function() {
 	
 	
-	
+	 
 	  $.fn.inputFilter = function(inputFilter) {
 		    return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
 		      if (inputFilter(this.value)) {

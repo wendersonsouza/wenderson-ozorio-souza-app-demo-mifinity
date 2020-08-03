@@ -3,6 +3,8 @@ package ie.wenderson.ozorio.app.demo.service.impl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -158,13 +160,37 @@ public class UserServiceImpl extends GenericService{
     }
     
     private void validateParameters(BaseEntity<User> baseEntity, User entity) throws Exception {
-    	
+    	baseEntity.setMessage("");
     	if(StringUtils.isEmpty(entity.getUsername()) || StringUtils.isEmpty(entity.getPassword()) 
     			|| Role.getByName(entity.getRoleName()) == null) {
     		baseEntity.setMessage("Invalid Parameters");
+    		
+    	}else if(!checkIsLettersandNumbers(entity.getUsername())) {
+    		baseEntity.setMessage("Username must contain letters and/or numbers without spaces.");
+    		
+    	}else  if(entity.getUsername().length()< 6 || entity.getUsername().length()> 10) {
+        	baseEntity.setMessage("Username must contain minimum 6 and maximum 10 letters.");
+
+    	}else  if(!checkIsLettersandNumbers(entity.getPassword())) {
+    		baseEntity.setMessage("Password must contain letters and/or numbers without spaces.");
+    		
+    	}else if(entity.getPassword().length()< 6 || entity.getPassword().length()> 10) {
+    		baseEntity.setMessage("Password must contain minimum 6 and maximum 10 letters.");
+    		    		
+    	}
+    	
+    	if(!StringUtils.isEmpty(baseEntity.getMessage())){
     		baseEntity.setSuccess(false);
     		throw new Exception();
     	}
+    	
+    }
+    
+    private boolean checkIsLettersandNumbers(String text) {
+    	
+    	Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
+    	Matcher matcher = pattern.matcher(text);
+    	return matcher.matches();
     }
 
 }

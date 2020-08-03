@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,8 +122,6 @@ public class CreditCardServiceImpl extends GenericService {
 		try {
 			isValidAdminUser(loggedUserId, baseEntity);
 			validateInsertParameters(baseEntity, credicard);
-			credicard.setNumber(StringUtils.trimAllWhitespace(credicard.getNumber()));
-			validateNumber(baseEntity, credicard.getNumber());
 			validateMonthAndYear(baseEntity, credicard.getYear(), credicard.getMonth());
 			validateNumberExist(baseEntity, credicard.getNumber()); 
 			credicard.setExpiryDate(expiryDateFormartter(credicard.getYear(), credicard.getMonth()));
@@ -139,29 +139,36 @@ public class CreditCardServiceImpl extends GenericService {
          return baseEntity;
 	}
 	
-	private void validateNumber(BaseEntity<CreditCard> baseEntity, String number) throws Exception{
-		
-		if(number.length() != 16) {
-			baseEntity.setMessage("Credit card number must have 16 nemeric digits.");
-			baseEntity.setSuccess(false);
-			throw new Exception();
-		}
-	}
 	private void validateInsertParameters(BaseEntity<CreditCard> baseEntity, CreditCard credicard) throws Exception{
+    	baseEntity.setMessage("");		
 		if(StringUtils.isEmpty(credicard.getMonth()) || StringUtils.isEmpty(credicard.getYear())
 				|| StringUtils.isEmpty(credicard.getHolderName()) || StringUtils.isEmpty(credicard.getNumber())) {
 			baseEntity.setMessage("Invalid parameters.");
-			baseEntity.setSuccess(false);
-			throw new Exception();
-		}
+			
+
+		}else if(credicard.getNumber().length() != 16 || !checkIsNumbers(credicard.getNumber())) {
+			baseEntity.setMessage("Credit card number must contain 16 numeric digits.");
+		} 
+
+    	if(!StringUtils.isEmpty(baseEntity.getMessage())){
+    		baseEntity.setSuccess(false);
+    		throw new Exception();
+    	}
 	}
+	
+	private boolean checkIsNumbers(String text) {
+    	
+    	Pattern pattern = Pattern.compile("^[0-9]+$");
+    	Matcher matcher = pattern.matcher(text);
+    	return matcher.matches();
+    }
 	
 	private void validateNumberExist(BaseEntity<CreditCard> baseEntity, String number) throws Exception{
 		  
 		if(!isNumeric(number)) {
 			baseEntity.setMessage("Invalid card credit number.");
 		}else if (credCardRepository.existsByNumber(number)) {
-			baseEntity.setMessage("Credit Card number exist.");
+			baseEntity.setMessage("Credit Card number already exist.");
 		}
 		
 		if(!StringUtils.isEmpty(baseEntity.getMessage())) {

@@ -22,12 +22,14 @@
 <div class="card w-50">
 	<div class="card-header">  
 		<div class="form-row">
-			<div class="col-12 col-md-10">User Details </div>
- 			<div class="col-6 col-md-2">
+			<div class="col-12 col-sm-10">user:<label id="logged-user" >	</label> </div>
+ 			<div class="col-6 col-sm-2">
  				<button type="button" class="btn btn-primary" id="logout-button">logout</button>
  			</div>
 		</div>
-	
+		<div class="form-row">
+		<h2>User Details</h2>
+		</div>
 	</div>
 		<div class="card-body">
 		   <div class="alert">
@@ -41,17 +43,19 @@
 	</div>  
 	<div class="card-body">
 			<div class="form-row">
-					<div class="col col-md-3">
+					<div class="col col-md-5">
 					    <label for="inputusername">Username</label>
-					    <input type="text" class="form-control" id="inputusername" name="inputusername" placeholder=""required autofocus>
+					    <input type="text" class="form-control" id="inputusername"  maxlength="15" name="inputusername" placeholder=""required autofocus>
 				   </div>
 			</div>
+			<br/>
 			<div class="form-row">
-				   <div class="col col-md-3">
+				   <div class="col col-md-5">
 					    <label for="inputpassword">Password</label>
-					    <input type="text" class="form-control" id="inputpassword" name="inputpassword" placeholder="" required autofocus>
+					    <input type="text" class="form-control" id="inputpassword" maxlength="15" name="inputpassword" placeholder="" required autofocus>
 				  </div>
 			</div>
+			<br/>
 			<div class="form-row">
 				   <div class="col col-md-3">
 					    <label for="inputrole">Role</label>

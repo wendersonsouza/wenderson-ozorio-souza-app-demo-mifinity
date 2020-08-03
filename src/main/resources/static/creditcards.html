@@ -22,10 +22,13 @@
 <div class="card w-75">
 	<div class="card-header"> 
 		<div class="form-row">
-			<div class="col-12 col-md-10">CrediCard List </div>
- 			<div class="col-6 col-md-2">
+			<div class="col-12 col-sm-10">user:<label id="logged-user" >	</label> </div>
+ 			<div class="col-6 col-sm-2">
  				<button type="button" class="btn btn-primary" id="logout-button">logout</button>
  			</div>
+		</div>
+		<div class="form-row">
+		<h2>Credit Cards  </h2>
 		</div>	
 	</div>
 	<div class="card-body">
@@ -34,16 +37,16 @@
 			<div class="form-row align-items-center">
 				<div class="col-auto">
 		      		<label class="sr-only" for="numberInput">number</label>
-		      		<input type="text" class="form-control mb-2" id="numberInput" name="numberInput" placeholder="number" required autofocus>
+		      		<input type="text" class="form-control mb-2" id="numberInput" name="numberInput" maxlength="16"  placeholder="number" required autofocus>
 		    	</div>
 		    	<div class="col-auto">
 		      		<button type="submit" class="btn btn-primary mb-2">search</button>
 		    	</div>
 		    	<div class="col-auto">
-		      		<button type="button" class="btn btn-primary mb-2" onclick="fowardSaveCreditcard('')">new Credit card </button>
+		      		<button type="button" class="btn btn-primary mb-2" onclick="fowardSaveCreditcard('')">new credit card </button>
 		    	</div>
 		    	<div class="col-auto">
-		      		<button type="button" class="btn btn-primary mb-2" onclick="fowardUsers()">Users </button>
+		      		<button type="button" class="btn btn-primary mb-2" onclick="fowardUsers()">users </button>
 		    	</div>
 		    	
 			</div>
@@ -59,7 +62,7 @@
 				      <th scope="col">Name</th>
 				      <th scope="col">Number</th>
 				      <th scope="col">Expire date</th>
-				      <th scope="col">Edit</th>
+				      <th scope="col">#</th>
 			    </tr>
 			  </thead>
 			  <tbody>

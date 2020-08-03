@@ -30,10 +30,13 @@
 
 	<div class="card-header"> 
 		<div class="form-row">
-			<div class="col-12 col-md-10">Credit Card Details </div>
- 			<div class="col-6 col-md-2">
+			<div class="col-12 col-sm-10">user:<label id="logged-user" >	</label> </div>
+ 			<div class="col-6 col-sm-2">
  				<button type="button" class="btn btn-primary" id="logout-button">logout</button>
  			</div>
+		</div>
+		<div class="form-row">
+		<h2>Credit Card Details </h2>
 		</div>
 	</div>
 	
@@ -54,30 +57,45 @@
 			<div class="form-row">
 					<div class="col col-md-5">
 					    <label for="inputholdername">Holder Name</label>
-					    <input type="text" class="form-control" id="inputholdername" name="inputholdername" placeholder="" required autofocus>
+					    <input type="text" class="form-control" id="inputholdername" maxlength="50" name="inputholdername" placeholder="" required autofocus>
 				   </div>
 			</div>
+			<br>
 			<div class="form-row">
 				   <div class="col col-md-5">
 					    <label for="inputnumber">Number</label>
-					    <input type="text" class="form-control" id="inputnumber" name="inputnumber" placeholder="" required autofocus>
+					    <input type="text" class="form-control" id="inputnumber" maxlength="16"  name="inputnumber" placeholder="" required autofocus>
 				  </div>
+				  <small  class="form-text text-muted">
+  					Credit card number must be 16 digits and contain only numbers.
+					</small>
 			</div>
 			<br>
 		  <div class="form-row">
 		  			<div class="col col-md-3">
 			      	  <label for="inputyear">Expiry Date</label>
 			      	</div>
-			      	<div class="col col-md-2">
-				      <select id="inputyear" class="custom-select" name="inputyear" required autofocus>
-				        <option selected>year</option>
+			      	<div class="col col-sm-4">
+			      	
+			      		<div class="input-group">
+					      <div class="input-group-prepend">
+	   						 <span class="input-group-text" id="inputGroup-year">year</span>
+	  					  </div>
+				      <select id="inputyear" class="custom-select" name="inputyear" aria-describedby="inputGroup-year" required autofocus>
+				        <option ></option>
 				      </select>
+				      </div>
 				    </div>
-				    <div class="col col-md-2">
-				      <select id="inputmonth" class="custom-select" name="inputmonth" required autofocus>
-				        <option selected>month</option>
-				      </select>
-					</div>
+				    <div class="col col-sm-4">
+					    <div class="input-group">
+					      <div class="input-group-prepend">
+	   						 <span class="input-group-text" id="inputGroup-month">month</span>
+	  					  </div>
+	  						<select id="inputmonth" class="custom-select" name="inputmonth" aria-describedby="inputGroup-month" required autofocus>
+					        <option ></option>
+					      </select>
+					    </div>
+					 </div>     
 		  </div>
 		  <br>
 		  <br>
